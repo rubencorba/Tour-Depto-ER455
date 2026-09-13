@@ -17,11 +17,23 @@ const HOTSPOT_CSS_CLASS = isMobileUserAgent() ? 'tour-hotspot tour-hotspot--mobi
  * (already positioned and wired up for click navigation by Pannellum),
  * so we only need to append our label to it.
  */
-function createHotspotLabel(hotSpotDiv: HTMLDivElement, args: unknown): void {
+/**
+ * Builds a hotspot's inner content: the visual dot + its always-visible
+ * label. `hotSpotDiv` is Pannellum's own hotspot element - it gets
+ * repositioned every frame via inline `transform`, so we never style
+ * `transform`/`transition` directly on it; the dot below is a separate
+ * child element instead.
+ */
+function createHotspotContent(hotSpotDiv: HTMLDivElement, args: unknown): void {
+  const dot = document.createElement('span');
+  dot.className = 'tour-hotspot-dot';
+  hotSpotDiv.appendChild(dot);
+
   const label = document.createElement('div');
   label.className = 'tour-hotspot-label';
   label.textContent = String(args);
   hotSpotDiv.appendChild(label);
+
   hotSpotDiv.setAttribute('role', 'button');
   hotSpotDiv.setAttribute('aria-label', String(args));
 }
@@ -45,7 +57,7 @@ function buildSceneConfig(room: Room): Pannellum.ConfigOptions {
       yaw: hotspot.yaw,
       pitch: hotspot.pitch,
       cssClass: HOTSPOT_CSS_CLASS,
-      createTooltipFunc: createHotspotLabel,
+      createTooltipFunc: createHotspotContent,
       createTooltipArgs: hotspot.label,
     })),
   };

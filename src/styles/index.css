@@ -23,27 +23,36 @@ body,
   padding-left: max(1rem, env(safe-area-inset-left));
 }
 
-/* Custom look for the in-panorama navigation hotspots (scene links). */
+/*
+ * Outer hotspot element - Pannellum overwrites its `transform` inline
+ * on every render frame to position it. Keep this rule to sizing only:
+ * no `transition` or hover `transform` here, or it fights Pannellum's
+ * per-frame updates and the hotspot visibly "travels" while panning.
+ */
 .tour-hotspot {
   width: 48px;
   height: 48px;
-  background-color: rgba(15, 23, 42, 0.7);
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  border-radius: 9999px;
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: transform 0.2s ease;
-  animation: tour-hotspot-pulse 2.4s ease-out infinite;
 }
 
-/* Smaller hit area on real mobile devices (same detection Pannellum
-   uses internally for its VR/orientation button). */
 .tour-hotspot--mobile {
   width: 35px;
   height: 35px;
 }
 
-.tour-hotspot:hover {
+/* Inner visual dot - entirely ours, safe to animate/transition. */
+.tour-hotspot-dot {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s ease;
+  animation: tour-hotspot-pulse 2.4s ease-out infinite;
+}
+
+.tour-hotspot:hover .tour-hotspot-dot {
   transform: scale(1.15);
 }
 
