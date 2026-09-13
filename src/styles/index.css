@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/*
+ * Applies the device safe area (notches, home indicators) as padding.
+ * Used on overlays (e.g. the rotate-device prompt) rather than globally,
+ * so the full-bleed panorama itself is never cropped by it.
+ */
+.safe-area-inset {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+/* Custom look for the in-panorama navigation hotspots (scene links). */
+.tour-hotspot {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(15, 23, 42, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  animation: tour-hotspot-pulse 2.4s ease-out infinite;
+}
+
+/* Smaller hit area on real mobile devices (same detection Pannellum
+   uses internally for its VR/orientation button). */
+.tour-hotspot--mobile {
+  width: 35px;
+  height: 35px;
+}
+
+.tour-hotspot:hover {
+  transform: scale(1.15);
+}
+
+/* Always-visible label above each in-panorama navigation hotspot. */
+.tour-hotspot-label {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: rgba(15, 23, 42, 0.75);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none; /* clicks pass through to the hotspot itself */
+}
+
+@keyframes tour-hotspot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45);
+  }
+
+  70% {
+    box-shadow: 0 0 0 14px rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/*
+ * Floor plan panel. Fixed to a corner and fairly small on desktop (always
+ * visible); on mobile, when toggled open, it takes over a larger centered
+ * area so it's actually usable at that size.
+ */
+.floor-plan-panel {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1rem;
+  z-index: 30; /* above the panorama, below the rotate-device prompt (z-50) */
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  width: min(80vw, 16rem);
+  height: min(80vw, 16rem);
+}
+
+.floor-plan-panel--mobile {
+  width: min(70vw, 13rem);
+  height: min(70vw, 13rem);
+}
+
+/* Always-visible label above each floor plan point. */
+.floor-plan-label {
+  fill: #ffffff;
+  font-size: 4.2px;
+  font-weight: 700;
+  paint-order: stroke fill;
+  stroke: rgba(15, 23, 42, 0.85);
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+
+.floor-plan-point {
+  fill: rgba(255, 255, 255, 0.85);
+  stroke: rgba(15, 23, 42, 0.8);
+  stroke-width: 1;
+  transition:
+    r 0.15s ease,
+    fill 0.15s ease;
+}
+
+.floor-plan-point:hover {
+  fill: #ffffff;
+}
+
+.floor-plan-point--active {
+  fill: #fb923c;
+  /* accent color marking the room currently on screen */
+  stroke: rgba(15, 23, 42, 0.9);
+  animation: floor-plan-point-pulse 2.4s ease-out infinite;
+}
+
+@keyframes floor-plan-point-pulse {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(251, 146, 60, 0.6));
+  }
+
+  70% {
+    filter: drop-shadow(0 0 6px rgba(251, 146, 60, 0));
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 rgba(251, 146, 60, 0));
+  }
+}
