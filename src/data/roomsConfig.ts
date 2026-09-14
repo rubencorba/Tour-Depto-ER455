@@ -68,10 +68,10 @@ const ROOM_INITIAL_VIEW: Record<RoomId, { yaw: number; pitch: number }> = {
  */
 const ROOM_HOTSPOTS: Record<RoomId, Room['hotspots']> = {
   [ROOM_IDS.living]: [
-    { target: ROOM_IDS.banio, yaw: 16, pitch: 0, label: ROOM_TITLES[ROOM_IDS.banio] },
-    { target: ROOM_IDS.dormitorio1, yaw: 16, pitch: -17, label: ROOM_TITLES[ROOM_IDS.dormitorio1] },
-    { target: ROOM_IDS.dormitorio2, yaw: 16, pitch: 17, label: ROOM_TITLES[ROOM_IDS.dormitorio2] },
-    { target: ROOM_IDS.cocina, yaw: 92, pitch: 5, label: ROOM_TITLES[ROOM_IDS.cocina] },
+    { target: ROOM_IDS.banio, yaw: 100, pitch: 0, label: ROOM_TITLES[ROOM_IDS.banio] },
+    { target: ROOM_IDS.dormitorio1, yaw: 100, pitch: -17, label: ROOM_TITLES[ROOM_IDS.dormitorio1] },
+    { target: ROOM_IDS.dormitorio2, yaw: 100, pitch: 17, label: ROOM_TITLES[ROOM_IDS.dormitorio2] },
+    { target: ROOM_IDS.cocina, yaw: 175, pitch: 5, label: ROOM_TITLES[ROOM_IDS.cocina] },
   ],
   [ROOM_IDS.banio]: [
     { target: ROOM_IDS.living, yaw: 74, pitch: 0, label: ROOM_TITLES[ROOM_IDS.living] },

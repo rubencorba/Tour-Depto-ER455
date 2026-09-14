@@ -93,10 +93,10 @@ body,
  * area so it's actually usable at that size.
  */
 .floor-plan-panel {
-  position: fixed;
+  /* position: fixed;
   bottom: 4.5rem;
   right: 1rem;
-  z-index: 30; /* above the panorama, below the rotate-device prompt (z-50) */
+  z-index: 30;  *//* above the panorama, below the rotate-device prompt (z-50) */
   overflow: hidden;
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -108,14 +108,14 @@ body,
 }
 
 .floor-plan-panel--mobile {
-  width: min(70vw, 13rem);
-  height: min(70vw, 13rem);
+  width: min(60vw, 11rem);
+  height: min(60vw, 11rem);
 }
 
 /* Always-visible label above each floor plan point. */
 .floor-plan-label {
   fill: #ffffff;
-  font-size: 4.2px;
+  font-size: 5.2px;
   font-weight: 700;
   paint-order: stroke fill;
   stroke: rgba(15, 23, 42, 0.85);
@@ -155,4 +155,68 @@ body,
   100% {
     filter: drop-shadow(0 0 0 rgba(251, 146, 60, 0));
   }
+}
+
+/*
+ * Restyle Pannellum's built-in orientation/VR button (icon-only by
+ * default, drawn from a CSS sprite) to match our own pill-shaped
+ * buttons, and add a text label since Pannellum doesn't provide one.
+ * `!important` guards against Pannellum's own stylesheet winning the
+ * cascade regardless of CSS import order.
+ */
+.pnlm-orientation-button {
+  position: fixed !important;
+  top: 1rem;
+  right: 1rem;
+  z-index: 40;
+  width: auto !important;
+  height: auto !important;
+  /* margin-top: 0; */
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: none !important;
+  background-color: rgba(2, 6, 23, 0.8);
+  border: none !important;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pnlm-orientation-button::after {
+  content: 'Giroscopio';
+  white-space: nowrap;
+}
+
+.pnlm-orientation-button:hover {
+  background-color: rgba(2, 6, 23, 0.9);
+}
+
+/* Active state (gyroscope currently on) - accent color so it's clear
+   it's toggled, same accent used for the current-room floor plan point. */
+.pnlm-orientation-button.pnlm-orientation-button-active {
+  background-color: rgba(251, 146, 60, 0.85);
+}
+
+/* Vertical stack for our own controls (top-right). Reserves space for
+   Pannellum's own orientation button above it on devices where it
+   appears - see isMobileUserAgent() usage in Tour.tsx. */
+.tour-controls-stack {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.tour-controls-stack--below-gyroscope {
+  top: 4rem;
 }

@@ -22,11 +22,15 @@ export default function Tour(): JSX.Element {
   const canFurnish = baseRoomId ? hasFurnishedVariant(baseRoomId) : false;
 
   const floorPlanSizeClass = isMobileUserAgent() ? 'floor-plan-panel--mobile' : '';
-  const floorPlanVisibilityClass = isPlanOpen ? 'block' : 'hidden';
 
   const handleSelectRoom = (roomId: RoomId) => {
     viewerRef.current?.loadScene(roomId);
   };
+  const isMobile = isMobileUserAgent();
+
+  const controlsStackClass = isMobile
+    ? 'tour-controls-stack tour-controls-stack--below-gyroscope'
+    : 'tour-controls-stack';
 
   const handleToggleFurniture = () => {
     const viewer = viewerRef.current;
@@ -44,13 +48,15 @@ export default function Tour(): JSX.Element {
     <div className="relative h-dvh w-dvw overflow-hidden bg-black">
       <PanoramaViewer containerRef={containerRef} />
       <RotateDevicePrompt visible={isPortraitPhone} />
-      <FloorPlan
-        currentRoomId={baseRoomId}
-        onSelectRoom={handleSelectRoom}
-        className={`${floorPlanSizeClass} ${floorPlanVisibilityClass}`}
-      />
-      <FloorPlanToggle isOpen={isPlanOpen} onToggle={() => setIsPlanOpen((open) => !open)} />
-      {canFurnish && <FurnitureToggle isFurnished={isFurnished} onToggle={handleToggleFurniture} />}
+      <div className={controlsStackClass}>
+        {canFurnish && <FurnitureToggle isFurnished={isFurnished} onToggle={handleToggleFurniture} />}
+        <FloorPlanToggle isOpen={isPlanOpen} onToggle={() => setIsPlanOpen((open) => !open)} />
+        <FloorPlan
+          currentRoomId={baseRoomId}
+          onSelectRoom={handleSelectRoom}
+          className={`${floorPlanSizeClass} ${isPlanOpen ? 'block' : 'hidden'}`}
+        />
+      </div>
     </div>
   );
 }

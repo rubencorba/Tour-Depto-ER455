@@ -17,7 +17,7 @@ export default function FloorPlanToggle({ isOpen, onToggle }: FloorPlanTogglePro
       onClick={onToggle}
       aria-pressed={isOpen}
       aria-label={isOpen ? 'Ocultar plano' : 'Mostrar plano'}
-      className="cursor-pointer fixed bottom-4 right-4 z-40 rounded-full bg-slate-950/80 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur"
+      className="cursor-pointer rounded-full bg-slate-950/80 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur"
     >
       Plano
     </button>
