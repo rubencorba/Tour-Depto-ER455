@@ -1,4 +1,4 @@
-import type { JSX, KeyboardEvent } from 'react';
+import type { CSSProperties, JSX, KeyboardEvent } from 'react';
 import { FLOOR_PLAN_ROOMS } from '../data/floorPlanConfig';
 import { ROOMS_BY_ID } from '../data/roomsConfig';
 import type { RoomId } from '../types/room';
@@ -6,8 +6,8 @@ import type { RoomId } from '../types/room';
 interface FloorPlanProps {
     currentRoomId: RoomId | null;
     onSelectRoom: (roomId: RoomId) => void;
-    /** Lets the parent control visibility responsively (mobile toggle vs. always-on desktop). */
     className?: string;
+    style?: CSSProperties;
 }
 
 // Wall segments as [x1, y1, x2, y2], in the same 0-100 viewBox units used
@@ -44,7 +44,12 @@ const POINT_RADIUS = 4;
  * independent of the hotspot navigation graph, so any room is reachable
  * from any room via the plan.
  */
-export default function FloorPlan({ currentRoomId, onSelectRoom, className = '' }: FloorPlanProps): JSX.Element {
+export default function FloorPlan({
+    currentRoomId,
+    onSelectRoom,
+    className = '',
+    style,
+}: FloorPlanProps): JSX.Element {
     const handleKeyDown = (event: KeyboardEvent<SVGGElement>, roomId: RoomId) => {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -53,7 +58,7 @@ export default function FloorPlan({ currentRoomId, onSelectRoom, className = '' 
     };
 
     return (
-        <div className={`floor-plan-panel ${className}`}>
+        <div className={`floor-plan-panel ${className}`} style={style}>
             <svg viewBox="0 0 100 100" className="h-full w-full" aria-label="Plano del departamento">
                 <g stroke="white" strokeWidth={1.5} strokeLinecap="round">
                     {WALLS.map(([x1, y1, x2, y2], index) => (

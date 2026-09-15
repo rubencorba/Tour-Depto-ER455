@@ -5,11 +5,6 @@ interface FloorPlanToggleProps {
   onToggle: () => void;
 }
 
-/**
- * Mobile-only "Plano" button that shows/hides the floor plan. On desktop
- * (md: and up) the floor plan is always visible, so this button is
- * hidden there.
- */
 export default function FloorPlanToggle({ isOpen, onToggle }: FloorPlanToggleProps): JSX.Element {
   return (
     <button
@@ -17,9 +12,15 @@ export default function FloorPlanToggle({ isOpen, onToggle }: FloorPlanTogglePro
       onClick={onToggle}
       aria-pressed={isOpen}
       aria-label={isOpen ? 'Ocultar plano' : 'Mostrar plano'}
-      className="cursor-pointer rounded-full bg-slate-950/80 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur"
+      className="tour-pill-button"
     >
-      Plano
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="1.5" />
+        <line x1="12" y1="3" x2="12" y2="13" />
+        <line x1="3" y1="13" x2="21" y2="13" />
+        <line x1="12" y1="13" x2="12" y2="21" />
+      </svg>
+      <span>Plano</span>
     </button>
   );
 }

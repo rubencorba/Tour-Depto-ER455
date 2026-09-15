@@ -2,6 +2,7 @@
 
 :root {
   color-scheme: dark;
+  --tour-button-width: 8rem;
 }
 
 html,
@@ -87,40 +88,14 @@ body,
   }
 }
 
-/*
- * Floor plan panel. Fixed to a corner and fairly small on desktop (always
- * visible); on mobile, when toggled open, it takes over a larger centered
- * area so it's actually usable at that size.
- */
+/* Always-visible label above each floor plan point. */
 .floor-plan-panel {
-  /* position: fixed;
-  bottom: 4.5rem;
-  right: 1rem;
-  z-index: 30;  *//* above the panorama, below the rotate-device prompt (z-50) */
   overflow: hidden;
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background-color: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(3px);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-  width: min(80vw, 16rem);
-  height: min(80vw, 16rem);
-}
-
-.floor-plan-panel--mobile {
-  width: min(60vw, 11rem);
-  height: min(60vw, 11rem);
-}
-
-/* Always-visible label above each floor plan point. */
-.floor-plan-label {
-  fill: #ffffff;
-  font-size: 5.2px;
-  font-weight: 700;
-  paint-order: stroke fill;
-  stroke: rgba(15, 23, 42, 0.85);
-  stroke-width: 1px;
-  stroke-linejoin: round;
 }
 
 .floor-plan-point {
@@ -141,6 +116,17 @@ body,
   /* accent color marking the room currently on screen */
   stroke: rgba(15, 23, 42, 0.9);
   animation: floor-plan-point-pulse 2.4s ease-out infinite;
+}
+
+/* Always-visible label above each floor plan point. */
+.floor-plan-label {
+  fill: #ffffff;
+  font-size: 6.4px;
+  font-weight: 700;
+  paint-order: stroke fill;
+  stroke: rgba(15, 23, 42, 0.85);
+  stroke-width: 1px;
+  stroke-linejoin: round;
 }
 
 @keyframes floor-plan-point-pulse {
@@ -169,23 +155,33 @@ body,
   top: 1rem;
   right: 1rem;
   z-index: 40;
-  width: auto !important;
+  width: var(--tour-button-width) !important;
   height: auto !important;
-  /* margin-top: 0; */
+  box-sizing: border-box !important;
   padding: 8px 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
   background-image: none !important;
   background-color: rgba(2, 6, 23, 0.8);
   border: none !important;
   border-radius: 9999px;
   backdrop-filter: blur(4px);
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
   color: #fff;
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+.pnlm-orientation-button::before {
+  content: '';
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6' stroke-linecap='round'%3E%3Cellipse cx='12' cy='12' rx='9' ry='4.5'/%3E%3Cellipse cx='12' cy='12' rx='4.5' ry='9' transform='rotate(45 12 12)'/%3E%3Ccircle cx='12' cy='12' r='1.4' fill='white' stroke='none'/%3E%3C/svg%3E");
 }
 
 .pnlm-orientation-button::after {
@@ -197,10 +193,39 @@ body,
   background-color: rgba(2, 6, 23, 0.9);
 }
 
-/* Active state (gyroscope currently on) - accent color so it's clear
-   it's toggled, same accent used for the current-room floor plan point. */
 .pnlm-orientation-button.pnlm-orientation-button-active {
   background-color: rgba(251, 146, 60, 0.85);
+}
+
+/* Shared pill style for our own control buttons (floor plan toggle,
+   furniture toggle) - same width/layout as Pannellum's own orientation
+   button above, so the whole stack lines up. */
+.tour-pill-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: var(--tour-button-width);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: none;
+  background-color: rgba(2, 6, 23, 0.8);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tour-pill-button:hover {
+  background-color: rgba(2, 6, 23, 0.9);
+}
+
+.tour-pill-button svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
 
 /* Vertical stack for our own controls (top-right). Reserves space for
@@ -219,4 +244,117 @@ body,
 
 .tour-controls-stack--below-gyroscope {
   top: 4rem;
+}
+
+.tour-buttons-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+/* When there isn't enough vertical space below the buttons (computed in
+   useFloorPlanLayout.ts), the plan pops out of the column and sits fixed
+   to the left of the button stack instead of shrinking further. */
+.floor-plan-panel--beside {
+  position: fixed;
+  right: calc(var(--tour-button-width) + 0.6rem + 1rem);
+  z-index: 40;
+}
+
+/*
+ * Restyle Pannellum's zoom controls (+/-) to match our own buttons:
+ * fully circular, with a small gap between them instead of one fused
+ * rounded rectangle, and our own icons instead of the sprite. Position
+ * is left as Pannellum's default (top-left) - not moved.
+ */
+.pnlm-zoom-controls {
+  width: 40px !important;
+  height: 88px !important; /* two 40px circles + 8px gap */
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.pnlm-zoom-in,
+.pnlm-zoom-out {
+  box-sizing: border-box !important;
+  position: absolute;
+  left: 0;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(2, 6, 23, 0.8);
+  background-image: none !important;
+  background-position: center !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pnlm-zoom-in {
+  top: 0;
+}
+
+.pnlm-zoom-out {
+  top: auto;
+  bottom: 0;
+}
+
+.pnlm-zoom-in:hover,
+.pnlm-zoom-out:hover {
+  background-color: rgba(2, 6, 23, 0.9) !important;
+}
+
+.pnlm-zoom-in::before,
+.pnlm-zoom-out::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.pnlm-zoom-in::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
+}
+
+.pnlm-zoom-out::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
+}
+
+/* Our own fullscreen toggle - circular, matches the zoom controls'
+   style, positioned right below them. Unlike Pannellum's built-in
+   button, this one fullscreens Tour's own wrapper div (see
+   FullscreenToggle.tsx), so everything inside it - panorama, floor
+   plan, our other buttons - stays visible in fullscreen. */
+.fullscreen-toggle-button {
+  position: fixed;
+  top: 6.3rem;
+  left: 4px;
+  z-index: 20;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(2, 6, 23, 0.8);
+  border: none;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.fullscreen-toggle-button:hover {
+  background-color: rgba(2, 6, 23, 0.9);
+}
+
+.fullscreen-toggle-button svg {
+  width: 18px;
+  height: 18px;
 }
