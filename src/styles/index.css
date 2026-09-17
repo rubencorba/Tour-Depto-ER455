@@ -3,6 +3,11 @@
 :root {
   color-scheme: dark;
   --tour-button-width: 8rem;
+  /* Single offset for the whole top-left button column (Pannellum's
+     zoom controls + our own icon buttons below them) - change these
+     two values to move all four buttons together, in one place. */
+  --tour-side-inset-x: 1rem;
+  --tour-side-inset-top: 0.8rem;
 }
 
 html,
@@ -71,7 +76,8 @@ body,
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
-  pointer-events: none; /* clicks pass through to the hotspot itself */
+  pointer-events: none;
+  /* clicks pass through to the hotspot itself */
 }
 
 @keyframes tour-hotspot-pulse {
@@ -152,8 +158,8 @@ body,
  */
 .pnlm-orientation-button {
   position: fixed !important;
-  top: 1rem;
-  right: 1rem;
+  top: var(--tour-side-inset-top);
+  right: var(--tour-side-inset-x);
   z-index: 40;
   width: var(--tour-button-width) !important;
   height: auto !important;
@@ -233,8 +239,8 @@ body,
    appears - see isMobileUserAgent() usage in Tour.tsx. */
 .tour-controls-stack {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: var(--tour-side-inset-top);
+  right: var(--tour-side-inset-x);
   z-index: 40;
   display: flex;
   flex-direction: column;
@@ -243,7 +249,7 @@ body,
 }
 
 .tour-controls-stack--below-gyroscope {
-  top: 4rem;
+  top: calc(var(--tour-side-inset-top) + 3rem);
 }
 
 .tour-buttons-group {
@@ -258,7 +264,7 @@ body,
    to the left of the button stack instead of shrinking further. */
 .floor-plan-panel--beside {
   position: fixed;
-  right: calc(var(--tour-button-width) + 0.6rem + 1rem);
+  right: calc(var(--tour-button-width) + 0.6rem + var(--tour-side-inset-x));
   z-index: 40;
 }
 
@@ -270,7 +276,8 @@ body,
  */
 .pnlm-zoom-controls {
   width: 40px !important;
-  height: 88px !important; /* two 40px circles + 8px gap */
+  height: 88px !important;
+  /* two 40px circles + 8px gap */
   background: none !important;
   border: none !important;
   box-shadow: none !important;
@@ -326,15 +333,13 @@ body,
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
 }
 
-/* Our own fullscreen toggle - circular, matches the zoom controls'
-   style, positioned right below them. Unlike Pannellum's built-in
-   button, this one fullscreens Tour's own wrapper div (see
-   FullscreenToggle.tsx), so everything inside it - panorama, floor
-   plan, our other buttons - stays visible in fullscreen. */
-.fullscreen-toggle-button {
+/* Shared style for our own circular icon-only buttons, top-left group
+   (alongside Pannellum's zoom controls). Each one only sets its own
+   `top` offset to stack in order. */
+.tour-icon-button {
   position: fixed;
-  top: 6.3rem;
-  left: 4px;
+  left: var(--tour-side-inset-x);
+  /* antes: left: 4px; */
   z-index: 20;
   box-sizing: border-box;
   width: 40px;
@@ -350,11 +355,149 @@ body,
   cursor: pointer;
 }
 
-.fullscreen-toggle-button:hover {
+.tour-icon-button:hover {
   background-color: rgba(2, 6, 23, 0.9);
 }
 
-.fullscreen-toggle-button svg {
+.tour-icon-button svg {
   width: 18px;
   height: 18px;
+}
+
+.fullscreen-toggle-button {
+  top: calc(var(--tour-side-inset-top) + 6.30rem);
+}
+
+.back-to-landing-button {
+  top: calc(var(--tour-side-inset-top) + 9.30rem);
+}
+
+/* Shift Pannellum's own zoom control column using the shared inset
+   variables above, so it moves together with our own buttons below it. */
+.pnlm-controls-container {
+  top: var(--tour-side-inset-top) !important;
+  left: var(--tour-side-inset-x) !important;
+}
+
+.onboarding-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 35;
+  /* above the panorama, below the rotate-device prompt (z-50) */
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+  /* never intercepts clicks - the dismissing click also reaches the panorama */
+  animation: onboarding-toast-fade-in 0.4s ease-out;
+}
+
+.onboarding-toast p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 1.6);
+  white-space: nowrap;
+}
+
+.onboarding-arrow {
+  font-size: 1.5rem;
+  line-height: 1;
+  position: relative;
+  top: -0.09em; /* compensa el glifo ‹ › que renderiza corrido hacia arriba */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  animation: onboarding-arrow-blink 1.4s ease-in-out infinite;
+}
+
+.onboarding-arrow--right {
+  animation-delay: 0.7s;
+}
+
+@keyframes onboarding-arrow-blink {
+
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes onboarding-toast-fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.gyroscope-toast {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+  animation: gyroscope-toast-fade-in 0.4s ease-out;
+}
+
+.gyroscope-toast p {
+  margin: 0;
+  max-width: 14rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.gyroscope-toast-icon {
+  width: 32px;
+  height: 48px;
+  overflow: visible;
+}
+
+/* Phone rocking side to side, like tilting it in your hand. */
+.gyroscope-phone {
+  transform-origin: 50% 85%;
+  animation: gyroscope-phone-tilt 1.4s ease-in-out infinite;
+}
+
+@keyframes gyroscope-phone-tilt {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes gyroscope-toast-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
 }

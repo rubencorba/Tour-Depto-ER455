@@ -20,7 +20,7 @@ export default function FloorPlanToggle({ isOpen, onToggle }: FloorPlanTogglePro
         <line x1="3" y1="13" x2="21" y2="13" />
         <line x1="12" y1="13" x2="12" y2="21" />
       </svg>
-      <span>Plano</span>
+      <span>{isOpen ? 'Ocultar' : 'Plano'}</span>
     </button>
   );
 }
