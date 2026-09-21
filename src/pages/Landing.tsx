@@ -47,13 +47,13 @@ export default function Landing({ onEnterTour }: LandingProps) {
 
           {/* Título */}
           <h1 className="text-4xl font-light leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
-            DEPARTAMENTO
+            ALQUILER CON OPCIÓN DE VENTA
           </h1>
 
           {/* Descripción */}
-          <p className="mt-5 max-w-xl text-base font-light leading-relaxed text-white/90 sm:mt-6 sm:text-lg md:text-xl">
+          {/* <p className="mt-5 max-w-xl text-base font-light leading-relaxed text-white/90 sm:mt-6 sm:text-lg md:text-xl">
             Conocé cada rincón de tu próximo hogar.
-          </p>
+          </p> */}
 
           {/* Características */}
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4 text-sm sm:mt-10 sm:gap-x-6 sm:text-base">
@@ -140,7 +140,7 @@ export default function Landing({ onEnterTour }: LandingProps) {
                 />
               </svg>
 
-              <span>85 m²</span>
+              <span>50 m²</span>
             </div>
           </div>
 
