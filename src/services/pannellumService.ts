@@ -83,6 +83,7 @@ export function buildTourConfig(rooms: Room[], firstSceneId: RoomId): Pannellum.
       autoRotateInactivityDelay: AUTO_ROTATE_INACTIVITY_DELAY,
       autoRotateStopDelay: AUTO_ROTATE_STOP_DELAY,
       showFullscreenCtrl: false,
+      showZoomCtrl: false,
       compass: false,
       draggable: true,
       minHfov: 50,

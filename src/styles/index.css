@@ -96,12 +96,19 @@ body,
 
 /* Always-visible label above each floor plan point. */
 .floor-plan-panel {
+  position: fixed;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
   overflow: hidden;
-  border-radius: 0.75rem;
+  /* border-radius: 0.75rem; */
   border: 1px solid rgba(255, 255, 255, 0.25);
   background-color: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(3px);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  width: min(80vw, 14rem);
+  height: min(80vw, 14rem);
 }
 
 .floor-plan-point {
@@ -156,7 +163,7 @@ body,
  * `!important` guards against Pannellum's own stylesheet winning the
  * cascade regardless of CSS import order.
  */
-.pnlm-orientation-button {
+/* .pnlm-orientation-button {
   position: fixed !important;
   top: var(--tour-side-inset-top);
   right: var(--tour-side-inset-x);
@@ -201,6 +208,12 @@ body,
 
 .pnlm-orientation-button.pnlm-orientation-button-active {
   background-color: rgba(251, 146, 60, 0.85);
+} */
+ /* Gyroscope control removed for this project - the default top-right
+   position conflicts with the Dynamic Island on recent iPhones in
+   landscape. There's no config flag to disable it, so we hide it here. */
+.pnlm-orientation-button {
+  display: none !important;
 }
 
 /* Shared pill style for our own control buttons (floor plan toggle,
@@ -248,25 +261,26 @@ body,
   gap: 0.6rem;
 }
 
-.tour-controls-stack--below-gyroscope {
+/* Esto era para reservarle espacio al giroscopio */
+/* .tour-controls-stack--below-gyroscope {
   top: calc(var(--tour-side-inset-top) + 3rem);
-}
+} */
 
-.tour-buttons-group {
+/* .tour-buttons-group {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.6rem;
-}
+} */
 
 /* When there isn't enough vertical space below the buttons (computed in
    useFloorPlanLayout.ts), the plan pops out of the column and sits fixed
    to the left of the button stack instead of shrinking further. */
-.floor-plan-panel--beside {
+/* .floor-plan-panel--beside {
   position: fixed;
   right: calc(var(--tour-button-width) + 0.6rem + var(--tour-side-inset-x));
   z-index: 40;
-}
+} */
 
 /*
  * Restyle Pannellum's zoom controls (+/-) to match our own buttons:
@@ -274,10 +288,10 @@ body,
  * rounded rectangle, and our own icons instead of the sprite. Position
  * is left as Pannellum's default (top-left) - not moved.
  */
-.pnlm-zoom-controls {
+/* .pnlm-zoom-controls {
   width: 40px !important;
   height: 88px !important;
-  /* two 40px circles + 8px gap */
+  
   background: none !important;
   border: none !important;
   box-shadow: none !important;
@@ -331,7 +345,7 @@ body,
 
 .pnlm-zoom-out::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
-}
+} */
 
 /* Shared style for our own circular icon-only buttons, top-left group
    (alongside Pannellum's zoom controls). Each one only sets its own
@@ -364,12 +378,12 @@ body,
   height: 18px;
 }
 
-.fullscreen-toggle-button {
-  top: calc(var(--tour-side-inset-top) + 6.30rem);
+.back-to-landing-button {
+  top: var(--tour-side-inset-top);
 }
 
-.back-to-landing-button {
-  top: calc(var(--tour-side-inset-top) + 9.30rem);
+.fullscreen-toggle-button {
+  top: calc(var(--tour-side-inset-top) + 3rem);
 }
 
 /* Shift Pannellum's own zoom control column using the shared inset
