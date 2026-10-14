@@ -47,7 +47,7 @@ export default function Landing({ onEnterTour }: LandingProps) {
 
           {/* Título */}
           <h1 className="text-4xl font-light leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
-            ALQUILER CON OPCIÓN DE VENTA
+            ALQUILER CON OPCIÓN DE COMPRA
           </h1>
 
           {/* Descripción */}
